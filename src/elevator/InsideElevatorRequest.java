@@ -5,7 +5,7 @@ package elevator;
  * the moment when the user enters the elevator, the user can choose the floor number to
  * which he wants to go...
  */
-public class InsideElevatorRequest {
+public class InsideElevatorRequest{
     private int dstFloor;
 
     public InsideElevatorRequest(int dstFloor) {
@@ -18,5 +18,10 @@ public class InsideElevatorRequest {
 
     public void setDstFloor(int dstFloor) {
         this.dstFloor = dstFloor;
+    }
+
+    @Override
+    public String toString(){
+        return "la destination de l'ascenseur : "+dstFloor;
     }
 }

@@ -1,26 +1,41 @@
 package elevator;
 
+import java.util.Scanner;
+
 public class Test {
+
     public static void main(String[] args) throws InterruptedException {
         Elevator elevator = new Elevator();
 
-        OutsideElevatorRequest outsideElevatorRequest = new OutsideElevatorRequest(Direction.UP, 0);
-        InsideElevatorRequest insideElevatorRequest = new InsideElevatorRequest(9);
-        ElevatorRequest elevatorRequest = new ElevatorRequest(insideElevatorRequest, outsideElevatorRequest);
+        ProcessRequest p = new ProcessRequest(elevator);
+        Thread T = new Thread(p);
+        T.start();
+        Thread.sleep(3000);
 
-        OutsideElevatorRequest outsideElevatorRequest2 = new OutsideElevatorRequest(Direction.DOWN, 3);
-        InsideElevatorRequest insideElevatorRequest2 = new InsideElevatorRequest(1);
-        ElevatorRequest elevatorRequest2 = new ElevatorRequest(insideElevatorRequest2, outsideElevatorRequest2);
+//        OutsideElevatorRequest outsideElevatorRequest = new OutsideElevatorRequest(Direction.UP, 0);
+//        InsideElevatorRequest insideElevatorRequest = new InsideElevatorRequest(5);
+//        ElevatorRequest elevatorRequest = new ElevatorRequest(insideElevatorRequest, outsideElevatorRequest);
 
-        OutsideElevatorRequest outsideElevatorRequest3 = new OutsideElevatorRequest(Direction.DOWN, 5);
-        InsideElevatorRequest insideElevatorRequest3 = new InsideElevatorRequest(0);
-        ElevatorRequest elevatorRequest3 = new ElevatorRequest(insideElevatorRequest3, outsideElevatorRequest3);
+        OutsideElevatorRequest outsideElevatorRequest1 = new OutsideElevatorRequest(Direction.UP, 0);
+        InsideElevatorRequest insideElevatorRequest1 = new InsideElevatorRequest(5);
+        ElevatorRequest elevatorRequest1 = new ElevatorRequest(insideElevatorRequest1, outsideElevatorRequest1);
 
-        elevator.upRequest(elevatorRequest);
-        elevator.downRequest(elevatorRequest2);
-        elevator.downRequest(elevatorRequest3);
-        elevator.start();
 
+//        AddRequest addRequest = new AddRequest(elevator, elevatorRequest);
+//        Thread thread = new Thread(addRequest);
+//        AddRequest addRequest1 = new AddRequest(elevator, elevatorRequest1);
+//        Thread thread1 = new Thread(addRequest1);
+////        thread.start();
+//        thread1.start();
+
+        elevator.upRequest(elevatorRequest1);
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
 //        System.out.println(outsideElevatorRequest.getSrcFloor());
 //        System.out.println(outsideElevatorRequest.getDirectionTo());

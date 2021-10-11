@@ -1,43 +1,66 @@
 package GUI;
 
+import elevator.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HandleFloorsButtonsAction extends AbstractAction {
     IHM ihm;
-    List<JButton> btnFloors = new ArrayList<>();
+    Elevator elevator = HandleControlButtonsAction.elevator;
+    InsideElevatorRequest insideElevatorRequest;
+    OutsideElevatorRequest outsideElevatorRequest;
+    ElevatorRequest elevatorRequest;
 
-    public HandleFloorsButtonsAction(IHM ihm, String txt){
-        super(txt);
+    public HandleFloorsButtonsAction(IHM ihm, String s){
+        super(s);
         this.ihm = ihm;
     }
 
-    public List<JButton> getBtnFloors() {
-        return btnFloors;
-    }
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("click ! ! ! ");
-        btnFloors.add(ihm.btnFloor0);btnFloors.add(ihm.btnFloor1);btnFloors.add(ihm.btnFloor2);
-        btnFloors.add(ihm.btnFloor3);btnFloors.add(ihm.btnFloor4);btnFloors.add(ihm.btnFloor5);
-        btnFloors.add(ihm.btnFloor6);btnFloors.add(ihm.btnFloor7);btnFloors.add(ihm.btnFloor8);
-        btnFloors.add(ihm.btnFloor9);
-        if(e.getSource()==ihm.stopEmergencyBtn){
-            ihm.rightTextArea.setText("HS");
-            ihm.leftTextArea.setText("HS");
-            ihm.stopEmergencyBtn.setBackground(Color.red);
-        }
-        for (int i=0; i < btnFloors.size(); i++){
-            if(e.getSource() == btnFloors.get(i)){
-                btnFloors.get(i).setBackground(Color.green);
 
+        for (JButton button : ihm.floorBtn){
+
+            if(e.getSource() == button){
+                int floor = Integer.parseInt(button.getText());
+                if(elevator.getCurrentDirection() == Direction.UP && elevator.getCurrentFloor() < floor) {
+                    outsideElevatorRequest = new OutsideElevatorRequest(Direction.UP, elevator.getCurrentFloor());
+                    insideElevatorRequest = new InsideElevatorRequest(floor);
+                    elevatorRequest = new ElevatorRequest(insideElevatorRequest, outsideElevatorRequest);
+                    try {
+                        ProcessRequest p = new ProcessRequest(elevator);
+                        Thread T = new Thread(p);
+                        T.start();
+
+                        Thread.sleep(1000);
+                        AddRequest addRequest = new AddRequest(elevator, elevatorRequest);
+                        Thread thread = new Thread(addRequest);
+                        thread.start();
+
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                else if(elevator.getCurrentDirection() == Direction.DOWN && elevator.getCurrentFloor() > floor){
+                    outsideElevatorRequest = new OutsideElevatorRequest(Direction.DOWN, elevator.getCurrentFloor());
+                    insideElevatorRequest = new InsideElevatorRequest(floor);
+                    elevatorRequest = new ElevatorRequest(insideElevatorRequest,outsideElevatorRequest);
+                    try {
+                        ProcessRequest p = new ProcessRequest(elevator);
+                        Thread T = new Thread(p);
+                        T.start();
+                        Thread.sleep(2000);
+                        AddRequest addRequest = new AddRequest(elevator, elevatorRequest);
+                        Thread thread = new Thread(addRequest);
+                        thread.start();
+
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
             }
         }
-
     }
 }

@@ -6,28 +6,18 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 public class IHM extends JFrame implements ItemListener {
-
     JButton upBtn;
     JButton downBtn;
     JButton stopBtn;
     JButton stopEmergencyBtn;
 
-
-    JButton btnFloor0;
-    JButton btnFloor1;
-    JButton btnFloor2;
-    JButton btnFloor3;
-    JButton btnFloor4;
-    JButton btnFloor5;
-    JButton btnFloor6;
-    JButton btnFloor7;
-    JButton btnFloor8;
-    JButton btnFloor9;
+    JButton[] floorBtn = new JButton[10] ;
 
     JComboBox floors;
 
-    TextArea leftTextArea;
-    TextArea rightTextArea;
+    static TextField leftTextArea = new TextField();
+    static TextField rightTextArea = new TextField();;
+
 
 
     public IHM(){
@@ -41,14 +31,15 @@ public class IHM extends JFrame implements ItemListener {
         setSize(1000,1000);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(null);
+       // setLayout(null);
 
         title(leftPanel(), "Outside the elevator", 200, 0);
-        log(leftPanel());
         logLeftPanel(leftPanel());
+        log(leftPanel());
         commandBtnLeftPanel(leftPanel());
         floorsBoxLeftPanel(leftPanel());
         leftPanel();
+
         /* ===================================================*/
 
         title(rightPanel(), "Inside the elevator", 700,850);
@@ -62,7 +53,7 @@ public class IHM extends JFrame implements ItemListener {
     JPanel rightPanel(){
         JPanel panel = new JPanel();
 
-        panel.setBackground(new Color(96,69,80));
+        panel.setBackground(new Color(52,69,80));
         panel.setBounds(700,0,800,1000);
         add(panel);
         return panel;
@@ -71,7 +62,7 @@ public class IHM extends JFrame implements ItemListener {
     JPanel leftPanel(){
         JPanel panel = new JPanel();
 
-        panel.setBackground(new Color(155,123,99));
+        panel.setBackground(new Color(0,123,99));
         panel.setBounds(0,0,700,1000);
         add(panel);
         return panel;
@@ -79,33 +70,20 @@ public class IHM extends JFrame implements ItemListener {
 
     void floorBtnRightPanel(JPanel panel){
 
+
         panel.setBounds(750,80,200,200);
         GridLayout gridLayout = new GridLayout(5, 2);
         gridLayout.setHgap(3);
         gridLayout.setVgap(3);
         panel.setLayout(gridLayout);
 
-        btnFloor0 = new JButton(new HandleFloorsButtonsAction(this, "0"));
-        btnFloor1 = new JButton(new HandleFloorsButtonsAction(this,"1"));
-        btnFloor2 = new JButton(new HandleFloorsButtonsAction(this,"2"));
-        btnFloor3 = new JButton(new HandleFloorsButtonsAction(this,"3"));
-        btnFloor4 = new JButton(new HandleFloorsButtonsAction(this,"4"));
-        btnFloor5 = new JButton(new HandleFloorsButtonsAction(this,"5"));
-        btnFloor6 = new JButton(new HandleFloorsButtonsAction(this,"6"));
-        btnFloor7 = new JButton(new HandleFloorsButtonsAction(this,"7"));
-        btnFloor8 = new JButton(new HandleFloorsButtonsAction(this,"8"));
-        btnFloor9 = new JButton(new HandleFloorsButtonsAction(this,"9"));
-
-        panel.add(btnFloor9);
-        panel.add(btnFloor8);
-        panel.add(btnFloor7);
-        panel.add(btnFloor6);
-        panel.add(btnFloor5);
-        panel.add(btnFloor4);
-        panel.add(btnFloor3);
-        panel.add(btnFloor2);
-        panel.add(btnFloor1);
-        panel.add(btnFloor0);
+        int numBtn = 9;
+        for (JButton button : floorBtn){
+            button = new JButton(new HandleFloorsButtonsAction(this,numBtn+""));
+            floorBtn[numBtn] = button;
+            panel.add(button);
+            numBtn--;
+        }
 
         add(panel);
     }
@@ -118,7 +96,7 @@ public class IHM extends JFrame implements ItemListener {
         gridLayout.setVgap(3);
         panel.setLayout(gridLayout);
 
-        stopEmergencyBtn = new JButton(new HandleFloorsButtonsAction(this,"STOP EMERGENCY"));
+        stopEmergencyBtn = new JButton(new HandleControlButtonsAction(this,"STOP EMERGENCY"));
 
         panel.add(stopEmergencyBtn);
 
@@ -126,11 +104,12 @@ public class IHM extends JFrame implements ItemListener {
     }
 
     void logRightPanel(JPanel panel){
-        panel.setBounds(825,0,50, 50);
+        panel.setBounds(825,0,50, 60);
 
-        rightTextArea = new TextArea("",3,3, TextArea.SCROLLBARS_HORIZONTAL_ONLY);
+//        rightTextArea = new TextArea("",4,4, TextArea.SCROLLBARS_HORIZONTAL_ONLY);
+        rightTextArea.setPreferredSize(new Dimension(40,45));
         rightTextArea.setEditable(false);
-        rightTextArea.setBackground(new Color(255,255,255));
+        rightTextArea.setBackground(new Color(80,80,80));
         panel.add(rightTextArea);
     }
 
@@ -148,37 +127,43 @@ public class IHM extends JFrame implements ItemListener {
     void commandBtnLeftPanel(JPanel panel){
 
         panel.setBounds(220,400,250,100);
-        upBtn = new JButton("/\\");
+        upBtn = new JButton(new HandleControlButtonsAction(this, "/\\"));
         panel.add(upBtn);
-        downBtn = new JButton( "\\/");
+        downBtn = new JButton(new HandleControlButtonsAction(this,"\\/"));
         panel.add(downBtn);
         add(panel);
 
     }
 
     void logLeftPanel(JPanel panel){
-        panel.setBounds(300,10,80, 80);
+
+        panel.setBounds(290,50,80, 85);
         JLabel label = new JLabel("");
         panel.add(label);
 
-        leftTextArea = new TextArea("",5,5, TextArea.SCROLLBARS_NONE);
-
+//        leftTextArea = new TextArea("",3,4, TextArea.SCROLLBARS_NONE);
+        leftTextArea.setPreferredSize(new Dimension(40,45));
         leftTextArea.setEditable(false);
-        leftTextArea.setBackground(new Color(255,255,255));
+        leftTextArea.setBackground(new Color(80,80,80));
         panel.add(leftTextArea);
+
     }
 
-    TextArea centreTextArea;
+    static JTextArea centreTextArea;
     void log(JPanel panel){
-        panel.setBounds(180,550,350, 200);
-        JLabel label = new JLabel("==Actions==");
+
+        panel.setBounds(80,550,550, 500);
+        JLabel label = new JLabel("");
         panel.add(label);
 
-        centreTextArea = new TextArea(">>",50,50, TextArea.SCROLLBARS_NONE);
-
+        centreTextArea = new JTextArea(">>");
         centreTextArea.setEditable(false);
+        centreTextArea.setPreferredSize(new Dimension(400,400));
         centreTextArea.setBackground(new Color(255,255,255));
+
         panel.add(centreTextArea);
+
+
     }
 
     void title(JPanel panel, String s, int x, int y){
@@ -188,11 +173,41 @@ public class IHM extends JFrame implements ItemListener {
     }
 
 
-    void addToLeftText(String text){
-        leftTextArea.append("[ " + text + " ]");
+
+    public JButton getUpBtn() {
+        return upBtn;
     }
-    void addToRightText(String text){
-        rightTextArea.append("[ " + text + " ]");
+
+    public JButton getDownBtn() {
+        return downBtn;
+    }
+
+    public JButton getStopBtn() {
+        return stopBtn;
+    }
+
+    public JButton getStopEmergencyBtn() {
+        return stopEmergencyBtn;
+    }
+
+    public JButton[] getFloorBtn() {
+        return floorBtn;
+    }
+
+    public JComboBox getFloors() {
+        return floors;
+    }
+
+    public static TextField getLeftTextArea() {
+        return leftTextArea;
+    }
+
+    public static TextField getRightTextArea() {
+        return rightTextArea;
+    }
+
+    public static JTextArea getCentreTextArea() {
+        return centreTextArea;
     }
 
     public FloorModel getModelFloor(){ return (FloorModel) floors.getModel();}

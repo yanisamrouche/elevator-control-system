@@ -28,4 +28,11 @@ public class OutsideElevatorRequest {
     public void setSrcFloor(int srcFloor) {
         this.srcFloor = srcFloor;
     }
+
+
+    @Override
+    public String toString() {
+        return " l'ascenseur a reçu une demande à l'étage " + srcFloor + " et l'usager veut aller vers - "
+                + directionTo;
+    }
 }
