@@ -15,7 +15,6 @@ public class ProcessRequest implements Runnable {
              */
             try {
                 if (elevator.getCurrentState() == State.STOP_EMERGENCY){
-                    System.out.println("URGENNNNNNNCEEE");
                 }else {
                     elevator.startElevator();
                 }

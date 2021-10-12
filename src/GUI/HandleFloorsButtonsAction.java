@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class HandleFloorsButtonsAction extends AbstractAction {
+
     IHM ihm;
     Elevator elevator = HandleControlButtonsAction.elevator;
     InsideElevatorRequest insideElevatorRequest;
@@ -26,6 +27,7 @@ public class HandleFloorsButtonsAction extends AbstractAction {
             if(e.getSource() == button){
                 int floor = Integer.parseInt(button.getText());
                 if(elevator.getCurrentDirection() == Direction.UP && elevator.getCurrentFloor() < floor) {
+
                     outsideElevatorRequest = new OutsideElevatorRequest(Direction.UP, elevator.getCurrentFloor());
                     insideElevatorRequest = new InsideElevatorRequest(floor);
                     elevatorRequest = new ElevatorRequest(insideElevatorRequest, outsideElevatorRequest);
@@ -39,15 +41,18 @@ public class HandleFloorsButtonsAction extends AbstractAction {
                         Thread thread = new Thread(addRequest);
                         thread.start();
 
+
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }
                 }
                 else if(elevator.getCurrentDirection() == Direction.DOWN && elevator.getCurrentFloor() > floor){
+
                     outsideElevatorRequest = new OutsideElevatorRequest(Direction.DOWN, elevator.getCurrentFloor());
                     insideElevatorRequest = new InsideElevatorRequest(floor);
                     elevatorRequest = new ElevatorRequest(insideElevatorRequest,outsideElevatorRequest);
                     try {
+
                         ProcessRequest p = new ProcessRequest(elevator);
                         Thread T = new Thread(p);
                         T.start();

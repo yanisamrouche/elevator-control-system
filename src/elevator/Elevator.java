@@ -12,8 +12,6 @@ import static elevator.Direction.*;
  */
 public class Elevator {
 
-    private int HIGHER_FLOOR = 9;
-    private int LOWER_FLOOR = 0;
     private static int currentFloor = 0;
     private static Direction currentDirection = UP;
     private static State currentState = State.NONE;
@@ -42,6 +40,13 @@ public class Elevator {
             e.printStackTrace();
         }
     }
+
+    /**
+     * this method take a param
+     * @param request : represent the Outside & inside requests
+     * and make the elevator move in the up direction
+     * @throws InterruptedException
+     */
     public void upRequest(ElevatorRequest request) throws InterruptedException {
         delay(500);
         int startFloor = currentFloor;
@@ -79,7 +84,7 @@ public class Elevator {
             }
         }
         IHM.getCentreTextArea().setText("");
-        System.out.println("porte ouverte XxX");
+        System.out.println("--Ouverture des portes--");
         IHM.getCentreTextArea().append("--Ouverture des portes-- \n");
         startFloor = currentFloor;
         IHM.getCentreTextArea().append("étage : "+startFloor+"\n");
@@ -110,6 +115,12 @@ public class Elevator {
 
     }
 
+    /**
+     * this method take a param
+     * @param request : represent the Outside & inside requests
+     * and make the elevator move in the down direction
+     * @throws InterruptedException
+     */
     public void downRequest(ElevatorRequest request) throws InterruptedException {
         delay(500);
         int startFloor = currentFloor;
@@ -171,6 +182,10 @@ public class Elevator {
         }
     }
 
+    /**
+     * this method checks if the elevator is requested in one of the floors
+     * @return true if the set of requests is not empty (means that there is requests from the user)
+     */
     public boolean checkRequest(){
 
         delay(500);
@@ -180,6 +195,11 @@ public class Elevator {
         return true;
     }
 
+    /**
+     * this method check new requests and add them to the set
+     * @param currentRequest : represents the inside & outside requests
+     * @return true if there is new requests to process & add them to the set
+     */
     public boolean checkNewRequests(ElevatorRequest currentRequest){
         delay(500);
         if (checkRequest()){
@@ -206,6 +226,11 @@ public class Elevator {
         return false;
     }
 
+    /**
+     * this method add the down requests to the set of current requests
+     * and updates the current direction of the elevator to DOWN
+     * and the current state to none requests
+     */
     public void addDownRequestsToCurrentRequests(){
         delay(500);
         if(!downRequests.isEmpty()){
@@ -215,7 +240,11 @@ public class Elevator {
             currentState = State.NONE;
         }
     }
-
+    /**
+     * this method add the up requests to the set of current requests
+     * and updates the current direction of the elevator to UP
+     * and the current state to none requests
+     */
     public void addUpRequestsToCurrentRequests(){
         delay(500);
         if(!upRequests.isEmpty()){
@@ -226,6 +255,10 @@ public class Elevator {
         }
     }
 
+    /**
+     * adding a given request to the current requests or to the waiting requests
+     * @param request : represents the user request
+     */
     public void addRequest(ElevatorRequest request){
         delay(500);
         if(currentState == State.NONE){
@@ -261,6 +294,11 @@ public class Elevator {
 
     }
 
+    /**
+     * this method represents the pending requests when the elevator already processing a request
+     * if the elevator is moving to the UP direction so the request is added to the upRequests idem for down
+     * @param request
+     */
     public void addtoWaitingRequests(ElevatorRequest request){
         delay(500);
         if(request.getOutsideElevatorRequest().getDirectionTo() == Direction.UP){
@@ -270,6 +308,10 @@ public class Elevator {
         }
     }
 
+
+    /**
+     * when the stop emergency is pressed the elevator stops and reset
+     */
     public void resetHS(){
         currentFloor = 0;
         currentDirection = UP;
@@ -280,20 +322,25 @@ public class Elevator {
 
     }
 
+    /**
+     *  Start elevator
+     * @throws InterruptedException
+     */
     public void startElevator() throws InterruptedException {
         delay(500);
         System.out.println("The Elevator has started functioning");
             System.out.println("-");
             while (true) {
-                System.out.println("...");
                 if (checkRequest()) {
                     if (currentDirection == UP) {
+                        // pollFirst : return the minimum element in the set
                         ElevatorRequest request = currentRequests.pollFirst();
                         upRequest(request);
                         if (currentRequests.isEmpty())
                             addDownRequestsToCurrentRequests();
                     }
                     if (currentDirection == DOWN) {
+                        // pollLast : return the maximum element in the set
                         ElevatorRequest request = currentRequests.pollLast();
                         downRequest(request);
                         if (currentRequests.isEmpty())
@@ -305,22 +352,6 @@ public class Elevator {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /* ==================================================================== */
     public static int getCurrentFloor() {
         return currentFloor;
     }
@@ -345,33 +376,5 @@ public class Elevator {
         this.currentState = currentState;
     }
 
-    public Direction goesUp() throws InterruptedException {
-        System.out.println(currentFloor);
-        while (true){
-            Thread.sleep(1000);
-                currentFloor++;
-                System.out.println(currentFloor);
-                if (HIGHER_FLOOR == currentFloor){
-                    currentDirection = DOWN;
-                    break;
-                }
-
-        }
-        return UP;
-    }
-
-   public Direction goesDown() throws InterruptedException {
-       System.out.println(currentFloor);
-       while (true) {
-               currentFloor--;
-               Thread.sleep(1000);
-               System.out.println(currentFloor);
-               if (LOWER_FLOOR == currentFloor) {
-                   currentDirection = UP;
-                   break;
-               }
-       }
-        return DOWN;
-    }
 
 }

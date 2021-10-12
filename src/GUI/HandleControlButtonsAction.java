@@ -45,7 +45,6 @@ public class HandleControlButtonsAction extends AbstractAction {
         if(e.getSource() == ihm.upBtn)
         {
 
-            ihm.upBtn.setBackground(Color.red);
             String outsideSelectedFloor = (String) ihm.floors.getModel().getSelectedItem();
             String outsideFLoor = outsideSelectedFloor.substring(7);
             System.out.println(outsideFLoor);
@@ -62,16 +61,13 @@ public class HandleControlButtonsAction extends AbstractAction {
 
             AddRequest addRequest = new AddRequest(elevator, elevatorRequest);
             thread = new Thread(addRequest);
-            ihm.upBtn.setBackground(Color.gray);
+
             thread.start();
-
-
-
 
         }
         else if(e.getSource() == ihm.downBtn)
         {
-            ihm.downBtn.setBackground(Color.red);
+
             String outsideSelectedFloor = (String) ihm.floors.getModel().getSelectedItem();
             String outsideFLoor = outsideSelectedFloor.substring(7);
             System.out.println(outsideFLoor);
@@ -85,10 +81,10 @@ public class HandleControlButtonsAction extends AbstractAction {
             insideElevatorRequest = new InsideElevatorRequest( Integer.parseInt(outsideFLoor.trim()));
             elevatorRequest = new ElevatorRequest(insideElevatorRequest, outsideElevatorRequest);
 
-                AddRequest addRequest = new AddRequest(elevator, elevatorRequest);
-                thread = new Thread(addRequest);
-                ihm.downBtn.setBackground(Color.gray);
+            AddRequest addRequest = new AddRequest(elevator, elevatorRequest);
+            thread = new Thread(addRequest);
             thread.start();
+
 
 
         }
